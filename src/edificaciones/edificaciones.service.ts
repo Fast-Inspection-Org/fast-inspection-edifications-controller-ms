@@ -6,6 +6,7 @@ import { EdificacionSerializable } from './serializable/edificacion.serializable
 import { CreateEdificacionDto } from './dto/create-edificacione.dto';
 import { EdificacionesFiltersDto } from './dto/filters/edificaciones-filters.dto';
 import { UpdateEdificacionDto } from './dto/update-edificacione.dto';
+import { ApiPaginatedResponse } from 'src/utils/api-response';
 
 @Injectable()
 export class EdificacionesService {
@@ -24,7 +25,9 @@ export class EdificacionesService {
   async findAll({
     nombre,
     direccion,
-  }: EdificacionesFiltersDto): Promise<EdificacionSerializable[]> {
+  }: EdificacionesFiltersDto): Promise<
+    ApiPaginatedResponse<EdificacionSerializable[]>
+  > {
     const edificacionesSerializable: EdificacionSerializable[] = [];
     // se obtiene la lista de configuraciones según los filtros
     const edifacionesEntity: Array<Edificacion> =
@@ -47,7 +50,7 @@ export class EdificacionesService {
       );
     });
 
-    return edificacionesSerializable;
+    return { data: edificacionesSerializable };
   }
 
   async findOne(id: number) {

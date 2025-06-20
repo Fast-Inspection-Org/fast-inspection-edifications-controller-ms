@@ -1,8 +1,8 @@
-import { Inspeccion } from 'src/inspecciones/serializable/inspeccion.serializable';
+import { InspeccionSerializable } from 'src/inspecciones/serializable/inspeccion.serializable';
 import { EdificacionSerializable } from './edificacion.serializable';
 
 export class EdificacionDetailsSerializable extends EdificacionSerializable {
-  inspecciones: Inspeccion[];
+  inspecciones: InspeccionSerializable[];
 
   constructor(
     id: number,
@@ -10,7 +10,7 @@ export class EdificacionDetailsSerializable extends EdificacionSerializable {
     direccion: string,
     coordX: number,
     coordY: number,
-    inspecciones: Inspeccion[],
+    inspecciones: InspeccionSerializable[],
   ) {
     super(id, nombre, direccion, coordX, coordY);
     this.inspecciones = inspecciones;

@@ -1,4 +1,4 @@
-export class Inspeccion {
+export class InspeccionSerializable {
   id: number;
   fechaInicio: string;
   configVersion: number;

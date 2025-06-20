@@ -33,7 +33,9 @@ jobs:
             echo 'POSTGRES_USERNAME=${{ secrets.POSTGRES_USERNAME }}' >> .env &&
             echo 'POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}' >> .env &&
             echo 'POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }}' >> .env &&
-            echo 'POSTGRES_SSL=${{ secrets.POSTGRES_SSL }}' >> .env &&  
+            echo 'POSTGRES_SSL=${{ secrets.POSTGRES_SSL }}' >> .env &&
+            echo 'INSPECTIONS_SERVICE_HOST=${{ secrets.INSPECTIONS_SERVICE_HOST }}' >> .env &&
+            echo 'INSPECTIONS_SERVICE_PORT=${{ secrets.INSPECTIONS_SERVICE_PORT }}' >> .env &&  
             git pull origin main && 
             docker-compose down &&
             docker-compose pull && 

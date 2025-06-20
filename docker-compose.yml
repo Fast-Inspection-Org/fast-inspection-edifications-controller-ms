@@ -13,6 +13,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-12134588ad}
       POSTGRES_DATABASE: ${POSTGRES_DATABASE:-fast_inspection_edifications_controller_db}
       POSTGRES_SSL: ${POSTGRES_SSL:-false}
+      INSPECTIONS_SERVICE_HOST: ${INSPECTIONS_SERVICE_HOST:-fast_inspection_inspection_controller_ms}
+      INSPECTIONS_SERVICE_PORT: ${INSPECTIONS_SERVICE_PORT:-3003}
     ports:
       - "${PORT:-3004}:${PORT:-3004}"
     networks:

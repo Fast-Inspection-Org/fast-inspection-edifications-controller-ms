@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Edificacion } from './entities/edificacione.entity';
 import { Like, Repository } from 'typeorm';
@@ -7,12 +7,18 @@ import { CreateEdificacionDto } from './dto/create-edificacione.dto';
 import { EdificacionesFiltersDto } from './dto/filters/edificaciones-filters.dto';
 import { UpdateEdificacionDto } from './dto/update-edificacione.dto';
 import { ApiPaginatedResponse } from 'src/utils/api-response';
+import { NameInspectionsService } from 'src/utils/globals';
+import { ClientProxy } from '@nestjs/microservices';
+import { EdificacionDetailsSerializable } from './serializable/edificacion-details.serializable';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class EdificacionesService {
   constructor(
     @InjectRepository(Edificacion)
     private edificacionRepository: Repository<Edificacion>,
+    @Inject(NameInspectionsService)
+    private readonly inspectionsClient: ClientProxy,
   ) {}
   async create(createEdificacioneDto: CreateEdificacionDto) {
     const edificacionEntity = this.edificacionRepository.create(
@@ -61,12 +67,17 @@ export class EdificacionesService {
     });
 
     if (edificacionEntity)
-      return new EdificacionSerializable(
+      return new EdificacionDetailsSerializable(
         edificacionEntity.id,
         edificacionEntity.nombre,
         edificacionEntity.direccion,
         edificacionEntity.coordX,
         edificacionEntity.coordY,
+        await firstValueFrom(
+          this.inspectionsClient.send('find-inspections', {
+            edificacionId: edificacionEntity.id,
+          }),
+        ),
       );
     else
       throw new BadRequestException('No existe una edificación con dicho id');

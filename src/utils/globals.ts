@@ -1,0 +1,1 @@
+export const NameInspectionsService = "INSPECTIONS_SERVICE"

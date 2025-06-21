@@ -48,11 +48,11 @@ export class EdificacionesController {
   }
 
   @MessagePattern('updateEdificacion')
-  async update(@Payload() updateEdificacioneDto: UpdateEdificacionDto) {
+  async update(@Payload() updateEdificacionDto: UpdateEdificacionDto) {
     try {
       await this.edificacionesService.update(
-        updateEdificacioneDto.id,
-        updateEdificacioneDto,
+        updateEdificacionDto.id,
+        updateEdificacionDto,
       );
       return { success: true };
     } catch (error) {

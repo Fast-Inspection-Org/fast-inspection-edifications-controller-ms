@@ -83,8 +83,8 @@ export class EdificacionesService {
       throw new BadRequestException('No existe una edificación con dicho id');
   }
 
-  async update(id: number, updateEdificacioneDto: UpdateEdificacionDto) {
-    await this.edificacionRepository.update({ id: id }, updateEdificacioneDto);
+  async update(id: number, updateEdificacionDto: UpdateEdificacionDto) {
+    await this.edificacionRepository.update({ id: id }, updateEdificacionDto);
   }
 
   async remove(id: number) {

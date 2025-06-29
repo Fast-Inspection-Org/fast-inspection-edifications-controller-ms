@@ -10,9 +10,11 @@ export class EdificacionDetailsSerializable extends EdificacionSerializable {
     direccion: string,
     coordX: number,
     coordY: number,
+    criticidad: number,
+    cantDeterioros: number,
     inspecciones: InspeccionSerializable[],
   ) {
-    super(id, nombre, direccion, coordX, coordY);
+    super(id, nombre, direccion, coordX, coordY, criticidad, cantDeterioros);
     this.inspecciones = inspecciones;
   }
 }

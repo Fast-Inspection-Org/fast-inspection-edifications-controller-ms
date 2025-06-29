@@ -77,20 +77,29 @@ export class EdificacionesService {
       },
     });
 
-    if (edificacionEntity)
+    if (edificacionEntity) {
+      const inspection: InspeccionSerializable = await firstValueFrom(
+        this.inspectionsClient.send(
+          'find-edification-last-inspection',
+          edificacionEntity.id.toString(),
+        ),
+      );
+
       return new EdificacionDetailsSerializable(
         edificacionEntity.id,
         edificacionEntity.nombre,
         edificacionEntity.direccion,
         edificacionEntity.coordX,
         edificacionEntity.coordY,
+        inspection.indiceCriticidad,
+        inspection.cantDeterioros,
         await firstValueFrom(
           this.inspectionsClient.send('find-inspections', {
             edificacionId: edificacionEntity.id,
           }),
         ),
       );
-    else
+    } else
       throw new BadRequestException('No existe una edificación con dicho id');
   }
 

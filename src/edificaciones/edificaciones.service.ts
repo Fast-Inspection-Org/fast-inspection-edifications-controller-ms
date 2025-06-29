@@ -11,6 +11,7 @@ import { NameInspectionsService } from 'src/utils/globals';
 import { ClientProxy } from '@nestjs/microservices';
 import { EdificacionDetailsSerializable } from './serializable/edificacion-details.serializable';
 import { firstValueFrom } from 'rxjs';
+import { InspeccionSerializable } from 'src/inspecciones/serializable/inspeccion.serializable';
 
 @Injectable()
 export class EdificacionesService {
@@ -44,17 +45,27 @@ export class EdificacionesService {
         },
       });
 
-    edifacionesEntity.forEach((edificacionEntity) => {
-      edificacionesSerializable.push(
-        new EdificacionSerializable(
-          edificacionEntity.id,
-          edificacionEntity.nombre,
-          edificacionEntity.direccion,
-          edificacionEntity.coordX,
-          edificacionEntity.coordY,
-        ),
-      );
-    });
+    await Promise.all(
+      edifacionesEntity.map(async (edificacionEntity) => {
+        const inspection: InspeccionSerializable = await firstValueFrom(
+          this.inspectionsClient.send(
+            'find-edification-last-inspection',
+            edificacionEntity.id.toString(),
+          ),
+        );
+        edificacionesSerializable.push(
+          new EdificacionSerializable(
+            edificacionEntity.id,
+            edificacionEntity.nombre,
+            edificacionEntity.direccion,
+            edificacionEntity.coordX,
+            edificacionEntity.coordY,
+            inspection.indiceCriticidad,
+            inspection.cantDeterioros,
+          ),
+        );
+      }),
+    );
 
     return { data: edificacionesSerializable };
   }

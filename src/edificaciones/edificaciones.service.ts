@@ -47,12 +47,18 @@ export class EdificacionesService {
 
     await Promise.all(
       edifacionesEntity.map(async (edificacionEntity) => {
-        const inspection: InspeccionSerializable = await firstValueFrom(
-          this.inspectionsClient.send(
-            'find-edification-last-inspection',
-            edificacionEntity.id.toString(),
-          ),
-        );
+        let inspection: InspeccionSerializable = null;
+
+        try {
+          inspection = await firstValueFrom(
+            this.inspectionsClient.send(
+              'find-edification-last-inspection',
+              edificacionEntity.id.toString(),
+            ),
+          );
+        } catch (error) {
+          inspection = null;
+        }
         edificacionesSerializable.push(
           new EdificacionSerializable(
             edificacionEntity.id,
@@ -60,8 +66,8 @@ export class EdificacionesService {
             edificacionEntity.direccion,
             edificacionEntity.coordX,
             edificacionEntity.coordY,
-            inspection.indiceCriticidad,
-            inspection.cantDeterioros,
+            inspection ? inspection.indiceCriticidad : 0,
+            inspection ? inspection.cantDeterioros : 0,
           ),
         );
       }),
@@ -78,12 +84,18 @@ export class EdificacionesService {
     });
 
     if (edificacionEntity) {
-      const inspection: InspeccionSerializable = await firstValueFrom(
-        this.inspectionsClient.send(
-          'find-edification-last-inspection',
-          edificacionEntity.id.toString(),
-        ),
-      );
+      let inspection: InspeccionSerializable = null;
+
+      try {
+        inspection = await firstValueFrom(
+          this.inspectionsClient.send(
+            'find-edification-last-inspection',
+            edificacionEntity.id.toString(),
+          ),
+        );
+      } catch (error) {
+        inspection = null;
+      }
 
       return new EdificacionDetailsSerializable(
         edificacionEntity.id,
@@ -91,8 +103,8 @@ export class EdificacionesService {
         edificacionEntity.direccion,
         edificacionEntity.coordX,
         edificacionEntity.coordY,
-        inspection.indiceCriticidad,
-        inspection.cantDeterioros,
+        inspection ? inspection.indiceCriticidad : 0,
+        inspection ? inspection.cantDeterioros : 0,
         await firstValueFrom(
           this.inspectionsClient.send('find-inspections', {
             edificacionId: edificacionEntity.id,
